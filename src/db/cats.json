@@ -1,0 +1,65 @@
+{
+  "lastId": 5,
+  "cats": [
+    {
+      "name": "Whiskers",
+      "age": 3,
+      "breed": "Persian",
+      "dateJoined": "2025-02-10T20:26:20.279Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "id": 1,
+      "isAdopted": false
+    },
+    {
+      "name": "Fluffy",
+      "age": 1,
+      "breed": "Siamese",
+      "dateJoined": "2025-02-10T21:26:20.279Z",
+      "vaccinated": true,
+      "temperament": [
+        "Playful",
+        "Dominant"
+      ],
+      "staffInCharge": "b339f710-6762-4c41-a0c2-2869eb8e1b11",
+      "id": 2,
+      "isAdopted": true,
+      "adopterId": 11111111
+    },
+    {
+      "name": "Grafito",
+      "age": 7,
+      "breed": "Nebelung",
+      "dateJoined": "2025-02-12T19:48:49.720Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Playful",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "id": 3,
+      "isAdopted": true,
+      "adopterId": 88888888
+    },
+    {
+      "name": "Draco",
+      "age": 7,
+      "breed": "Orange tabby",
+      "dateJoined": "2025-02-12T20:41:13.086Z",
+      "vaccinated": true,
+      "temperament": [
+        "Dominant",
+        "Curious",
+        "Nervous"
+      ],
+      "staffInCharge": "b339f710-6762-4c41-a0c2-2869eb8e1b11",
+      "id": 4,
+      "isAdopted": true,
+      "adopterId": 88888888
+    }
+  ]
+}

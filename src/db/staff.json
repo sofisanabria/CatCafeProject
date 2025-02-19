@@ -1,0 +1,20 @@
+{
+  "staff": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "name": "The",
+      "lastName": "Boss",
+      "age": 30,
+      "dateJoined": "2021-01-01T00:00:00.000Z",
+      "role": "Boss"
+    },
+    {
+      "name": "Alexandra",
+      "lastName": "Rama",
+      "age": 32,
+      "dateJoined": "2025-02-12T19:46:23.292Z",
+      "role": "Cat petting manager",
+      "id": "b339f710-6762-4c41-a0c2-2869eb8e1b11"
+    }
+  ]
+}
