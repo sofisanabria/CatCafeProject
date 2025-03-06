@@ -1,5 +1,5 @@
 export interface Adopter {
-    id: number;
+    id?: number;
     name: string;
     lastName: string;
     dateOfBirth: Date;

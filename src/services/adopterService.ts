@@ -5,15 +5,17 @@ const path = './src/db/adopters.json';
 
 
 interface Database {
+  lastId: number;
   adopters: Adopter[];
 }
 
 export class AdopterService {
   private async readDB(): Promise<Database> {
-    const defaultData: Database = { adopters: [] };
+    const defaultData: Database = { lastId: 0, adopters: [] };
     try {
       const db = await JSONFilePreset<Database>(path, defaultData);
       return {
+        lastId: db.data.lastId ?? 0,
         adopters: db.data.adopters ?? []
       };
     } catch {
@@ -23,7 +25,7 @@ export class AdopterService {
   }
 
   private async writeDB(data: Database): Promise<void> {
-    const defaultData: Database = { adopters: [] };
+    const defaultData: Database = { lastId: 0, adopters: [] };
     const db = await JSONFilePreset<Database>(path, defaultData);
     db.data = data;
     db.write();
@@ -40,12 +42,18 @@ export class AdopterService {
     return db.adopters;
   }
 
-  async addAdopter(adopter: Adopter): Promise<Adopter> {
+  async addAdopter(adopter: Omit<Adopter, 'id'>): Promise<Adopter> {
     const db = await this.readDB();
-    const index = db.adopters.length;
-    db.adopters.push(adopter);
+
+    const newAdopter: Adopter = {
+      ...adopter,
+      id: db.lastId + 1
+    };
+
+    db.lastId = Number(newAdopter.id);
+    db.adopters.push(newAdopter);
     await this.writeDB(db);
-    return db.adopters[index];
+    return newAdopter;
   }
 
   async updateAdopter(adopter: Adopter): Promise<Adopter | null>{

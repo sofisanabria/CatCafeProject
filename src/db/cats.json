@@ -1,18 +1,21 @@
 {
-  "lastId": 5,
+  "lastId": 31,
   "cats": [
     {
-      "name": "Whiskers",
-      "age": 3,
-      "breed": "Persian",
-      "dateJoined": "2025-02-10T20:26:20.279Z",
+      "name": "White Whiskers",
+      "age": 4,
+      "breed": "Ragdoll",
+      "dateJoined": "2025-03-06T18:42:12.185Z",
       "vaccinated": true,
       "temperament": [
-        "Calm"
+        "Calm",
+        "Curious",
+        "Dominant"
       ],
-      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "staffInCharge": "b339f710-6762-4c41-a0c2-2869eb8e1b11",
+      "isAdopted": true,
       "id": 1,
-      "isAdopted": false
+      "adopterId": 1
     },
     {
       "name": "Fluffy",
@@ -27,7 +30,7 @@
       "staffInCharge": "b339f710-6762-4c41-a0c2-2869eb8e1b11",
       "id": 2,
       "isAdopted": true,
-      "adopterId": 11111111
+      "adopterId": 2
     },
     {
       "name": "Grafito",
@@ -43,7 +46,7 @@
       "staffInCharge": "00000000-0000-0000-0000-000000000000",
       "id": 3,
       "isAdopted": true,
-      "adopterId": 88888888
+      "adopterId": 1
     },
     {
       "name": "Draco",
@@ -59,7 +62,203 @@
       "staffInCharge": "b339f710-6762-4c41-a0c2-2869eb8e1b11",
       "id": 4,
       "isAdopted": true,
-      "adopterId": 88888888
+      "adopterId": 1
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T14:56:30.823Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 6
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T15:03:59.165Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 7
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:03:00.530Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 8
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:03:39.777Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 10
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:18:01.847Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 12
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:18:39.571Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 14
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:18:56.076Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 16
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:19:42.048Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 18
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:29:06.452Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 20
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:30:00.227Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 22
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:32:59.081Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 24
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:36:38.700Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 26
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:41:19.319Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 28
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-03-06T18:42:12.173Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 30
     }
   ]
 }

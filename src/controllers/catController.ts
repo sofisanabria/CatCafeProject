@@ -18,7 +18,7 @@ const CatSchema = z.object({
   temperament: z.array(z.enum(TEMPERAMENTS)),
   staffInCharge: z.string().uuid(),
   isAdopted: z.boolean(),
-  adopterId: z.number().int().positive().nullable()
+  adopterId: z.number().int().positive().optional()
 });
 
 export class CatController {
@@ -76,19 +76,19 @@ export class CatController {
       }
       
       //Adopter logic block code
-      if (validatedData.isAdopted && validatedData.adopterId !== null)
+      if (validatedData.isAdopted && validatedData.adopterId !== undefined)
       {
         const catAdopter = await adopterService.getAdopter(validatedData.adopterId);
         if (!catAdopter){
            return res.status(404).json({message: 'Adopter not found'});
         }
       }
-      if (validatedData.isAdopted && validatedData.adopterId === null){
+      if (validatedData.isAdopted && validatedData.adopterId === undefined){
         return res.status(400).json({message: 'AdopterId must be specified when the cat is adopted'});
       }
       else //If the cat is not adopted, ignore the ID the user might have passed.
       {
-        validatedData.adopterId = null;
+        validatedData.adopterId = undefined;
       }
 
       const newCat = await catService.addCat(validatedData);
@@ -113,19 +113,19 @@ export class CatController {
       }
       
       //Adopter logic block code
-      if (validatedData.isAdopted && validatedData.adopterId !== null)
+      if (validatedData.isAdopted && validatedData.adopterId !== undefined)
       {
         const catAdopter = await adopterService.getAdopter(validatedData.adopterId);
         if (!catAdopter){
            return res.status(404).json({message: 'Adopter not found'});
         }
       }
-      if (validatedData.isAdopted && validatedData.adopterId === null){
+      if (validatedData.isAdopted && validatedData.adopterId === undefined){
         return res.status(400).json({message: 'AdopterId must be specified when the cat is adopted'});
       }
       else //If the cat is not adopted, ignore the ID the user might have passed.
       {
-        validatedData.adopterId = null;
+        validatedData.adopterId = undefined;
       }
 
       const updatedCat = await catService.updateCat({ ...validatedData, id: parseInt(id) });

@@ -8,7 +8,6 @@ const adopterService = new AdopterService();
 const catService = new CatService();
 
 const AdopterSchema = z.object({
-  id: z.number().int().positive().refine((num) => num.toString().length >= 7, {message: "ID must have at least 7 digits"}),
   name: z.string().min(1),
   lastName: z.string().min(1),
   dateOfBirth: z.string().or(z.date()).transform((val) => new Date(val)),
@@ -55,10 +54,6 @@ export class AdopterController {
   async addAdopter(req: Request, res: Response) {
     try {
       const validatedAdopter = AdopterSchema.parse(req.body);
-      const isAlreadyAdded = await adopterService.getAdopter(validatedAdopter.id);
-      if (isAlreadyAdded) {
-        return res.status(400).json({message: 'An adopter with that ID was already added.'});
-      }
       if ( !isAdult(validatedAdopter.dateOfBirth) )
       {
         return res.status(400).json({message: 'The adopter must be at least 18 years old to adopt a cat'});
