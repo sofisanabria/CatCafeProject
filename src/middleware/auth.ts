@@ -1,30 +1,37 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
+  // Check if auth is disabled
+  if (process.env.DISABLE_AUTH === "true") {
+    return next();
+  }
+
   // Get authorization header
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    res.setHeader('WWW-Authenticate', 'Basic');
-    return res.status(401).json({ error: 'Authentication required' });
+    res.setHeader("WWW-Authenticate", "Basic");
+    return res.status(401).json({ error: "Authentication required" });
   }
 
   // Check if it's Basic auth
-  if (!authHeader.startsWith('Basic ')) {
-    return res.status(401).json({ error: 'Invalid authentication method' });
+  if (!authHeader.startsWith("Basic ")) {
+    return res.status(401).json({ error: "Invalid authentication method" });
   }
 
   // Get credentials
-  const base64Credentials = authHeader.split(' ')[1];
-  const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
-  const [username, password] = credentials.split(':');
+  const base64Credentials = authHeader.split(" ")[1];
+  const credentials = Buffer.from(base64Credentials, "base64").toString(
+    "utf-8"
+  );
+  const [username, password] = credentials.split(":");
 
   // In a real application, you would validate against a secure user store
   // For this example, we'll use a simple check
-  if (username === 'admin' && password === 'password') {
+  if (username === "admin" && password === "password") {
     next();
   } else {
-    res.setHeader('WWW-Authenticate', 'Basic');
-    res.status(401).json({ error: 'Invalid credentials' });
+    res.setHeader("WWW-Authenticate", "Basic");
+    res.status(401).json({ error: "Invalid credentials" });
   }
 };

@@ -28,28 +28,46 @@ npm run dev
 ```
 After the server starts, you can access the Swagger interface by opening [http://localhost:3000/api-docs](http://localhost:3000/api-docs) in your browser.
 
-## API Endpoints
+### Authentication
+The staff endpoints have basic authentication. The credentials to use them are:
+```sh
+User: admin
+Password: password
+```
+
+To disable authentication (for development purposes), you can run the project with the DISABLE_AUTH environment variable:
+
+Windows (PowerShell):
+```sh
+$env:DISABLE_AUTH="true"; npm run dev
+```
+
+Linux/Mac:
+```sh
+DISABLE_AUTH=true npm run dev
+```
+
+## Endpoints
+
+### Cats
 - `GET /cats` - Retrieve a list of all cats
 - `POST /cats` - Add a new cat
 - `GET /cats/:id` - Retrieve a specific cat by ID
 - `PUT /cats/:id` - Update a specific cat by ID
 - `DELETE /cats/:id` - Delete a specific cat by ID
 - `PATCH /cats/:id` - Update the cat's staff in charge and/or its adopter by the cat's ID
+
+### Staff
 - `GET /staff` - Retrieve a list of all staff members
 - `POST /staff` - Add a new staff member
 - `GET /staff/:id` - Retrieve a specific staff member by ID
 - `DELETE /staff/:id` - Delete a specific staff member by ID
+
+### Adopters
 - `GET /adpoters` - Retrieve a list of all adopters
 - `POST /adopters` - Add a new adopter
 - `GET /adopters/:id` - Retrieve a specific adopter by ID
 - `DELETE /adopters/:id` - Delete a specific adopter by ID
-
-The staff endpoints have basic authentication. The credentials to use them are:
-
-```sh
-User: admin
-Password: password
-```
 
 ## Contributing
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
