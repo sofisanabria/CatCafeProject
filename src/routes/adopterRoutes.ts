@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { AdopterController } from '../controllers/adopterController.js';
+import { Router } from "express";
+import { AdopterController } from "../controllers/adopterController.js";
 
 const router = Router();
 const adopterController = new AdopterController();
@@ -73,8 +73,8 @@ const adopterController = new AdopterController();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- * 
- * /api/Adopters:
+ *
+ * /api/adopters:
  *   get:
  *     tags:
  *       - Adopters
@@ -111,9 +111,6 @@ const adopterController = new AdopterController();
  *           schema:
  *             type: object
  *             properties:
- *               id:
- *                 type: integer
- *                 description: ID of the adopter, without dots and hyphen.
  *               name:
  *                 type: string
  *                 description: First name.
@@ -151,10 +148,13 @@ const adopterController = new AdopterController();
  *               $ref: '#/components/schemas/Error'
  */
 
-
-router.get('/adopters/:id', (req, res) => adopterController.getAdopter(req, res));
-router.get('/adopters', (req, res) => adopterController.getAdopters(req, res));
-router.post('/adopters', (req, res) => adopterController.addAdopter(req, res));
-router.delete('/adopters/:id', (req, res) => adopterController.removeAdopter(req, res));
+router.get("/adopters/:id", (req, res) =>
+  adopterController.getAdopter(req, res)
+);
+router.get("/adopters", (req, res) => adopterController.getAdopters(req, res));
+router.post("/adopters", (req, res) => adopterController.addAdopter(req, res));
+router.delete("/adopters/:id", (req, res) =>
+  adopterController.removeAdopter(req, res)
+);
 
 export default router;
