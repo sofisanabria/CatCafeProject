@@ -229,7 +229,8 @@ const options = {
             dateOfBirth: {
               type: "string",
               format: "date-time",
-              description: "The date of birth of the adopter",
+              description:
+                "The person must be at least 18 years old on the date they are created",
             },
             role: {
               type: "integer",
