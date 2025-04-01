@@ -29,11 +29,12 @@ npm run dev
 After the server starts, you can access the Swagger interface by opening [http://localhost:3000/api-docs](http://localhost:3000/api-docs) in your browser.
 
 ### Authentication
-The staff endpoints have basic authentication. The credentials to use them are:
-```sh
-User: admin
-Password: password
-```
+The staff endpoints have JWT authentication, and uses a JWT secret. A JWT secret is a string used to sign and verify JSON Web Tokens (JWTs).  It's essential for ensuring that your JWTs are secure and can't be tampered with.
+When you create a JWT, you use the secret to generate a signature. When a user sends the JWT back, your server uses the same secret to verify the signature.
+You'll need to create a .env file with this variable set: "JWT_SECRET=". Use a long, random, and unpredictable string for the value.
+
+To use the protected endpoints (the Staff ones) you must create an user with the /register endpoint. That way you'll have credentials for the /login endpoint, which will return a Token that you'll need to authenticate for the Staff endpoints.
+
 
 To disable authentication (for development purposes), you can run the project with the DISABLE_AUTH environment variable:
 
@@ -47,7 +48,21 @@ Linux/Mac:
 DISABLE_AUTH=true npm run dev
 ```
 
+### Rate limit and Token expiration
+
+The Login endpoint is set to accept up to 5 attempts. If you could not log in correctly after 5 attempts, you will be asked to wait 5 minutes.
+These settings are set in the routes/authRoutes.ts file, under the loginLimiter constant.
+
+The Access Token expiration is set to 15 minutes, and the expiration of the Refresh Token is set to 7 days.
+These settings are set in the middleware/auth.ts file.
+
+
 ## Endpoints
+
+### Auth
+- `POST /auth/register` - Let you create a user to authenticate later
+- `POST /auth/login` - Logs you in with a user and returns a Token, that you'll need for Staff endpoints
+- `POST /auth/refresh` - When your token has expired (after 15 minutes), you can use this to get a new one so you don't need to log in again
 
 ### Cats
 - `GET /cats` - Retrieve a list of all cats
@@ -57,7 +72,7 @@ DISABLE_AUTH=true npm run dev
 - `DELETE /cats/:id` - Delete a specific cat by ID
 - `PATCH /cats/:id` - Update the cat's staff in charge and/or its adopter by the cat's ID
 
-### Staff
+### Staff (Auth required)
 - `GET /staff` - Retrieve a list of all staff members
 - `POST /staff` - Add a new staff member
 - `GET /staff/:id` - Retrieve a specific staff member by ID

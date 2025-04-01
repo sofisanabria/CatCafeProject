@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { StaffController } from '../controllers/staffController.js';
-import { basicAuth } from '../middleware/auth.js'; //comment this line to remove authentication
 
 const router = Router();
 const staffController = new StaffController();
@@ -14,7 +13,7 @@ const staffController = new StaffController();
  *     summary: Get a staff member by ID
  *     description: Retrieve a single staff member by their ID
  *     security:
- *       - basicAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -59,6 +58,8 @@ const staffController = new StaffController();
  *       - Staff
  *     summary: Delete a Staff member
  *     description: Remove a Staff member from the café
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -92,7 +93,7 @@ const staffController = new StaffController();
  *     summary: Get all the staff members
  *     description: Retrieve all the staff
  *     security:
- *       - basicAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: A list of Staff
@@ -124,7 +125,7 @@ const staffController = new StaffController();
  *     summary: Add a new staff member
  *     description: Add a new staff member to the café
  *     security:
- *       - basicAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -175,16 +176,9 @@ const staffController = new StaffController();
  *               $ref: '#/components/schemas/Error'
  */
 
-//Comment this block to remove authentication:
-router.get('/staff/:id', basicAuth, (req, res) => staffController.getStaff(req, res));
-router.get('/staff', basicAuth, (req, res) => staffController.getAllStaff(req, res));
-router.post('/staff', basicAuth, (req, res) => staffController.addStaff(req, res));
-router.delete('/staff/:id', basicAuth, (req, res) => staffController.removeStaff(req, res));
-
-//Uncomment this block to remove authentication:
-/*router.get('/staff/:id', (req, res) => staffController.getStaff(req, res));
+router.get('/staff/:id', (req, res) => staffController.getStaff(req, res));
 router.get('/staff', (req, res) => staffController.getAllStaff(req, res));
 router.post('/staff', (req, res) => staffController.addStaff(req, res));
-router.delete('/staff', (req, res) => staffController.removeStaff(req, res));*/
+router.delete('/staff/:id', (req, res) => staffController.removeStaff(req, res));
 
 export default router;

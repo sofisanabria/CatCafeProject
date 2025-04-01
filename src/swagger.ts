@@ -17,6 +17,27 @@ const options = {
     ],
     components: {
       schemas: {
+        User: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+              description: "The user ID"
+            },
+            username: {
+              type: "string",
+              description: "The username of the user"
+            },
+            password: {
+              type: "string",
+              description: "The password of the user"
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time"
+            }
+          }
+        },
         Cat: {
           type: "object",
           required: [
@@ -252,10 +273,11 @@ const options = {
         },
       },
       securitySchemes: {
-        basicAuth: {
+        BearerAuth: {
           type: "http",
-          scheme: "basic",
-        },
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        }
       },
     },
   },
