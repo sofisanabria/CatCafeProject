@@ -22,6 +22,11 @@ declare module 'express' {
 }
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+  
+  if (process.env.DISABLE_AUTH === 'true') {
+    return next(); // Skip auth
+  }
+  
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
