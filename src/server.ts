@@ -7,10 +7,16 @@ import adopterRoutes from './routes/adopterRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { authenticateToken } from './middleware/auth.js';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
 const port = 3000;
+
+app.use(cors({
+  origin: 'http://localhost:4173',
+  credentials: true,
+}));
 
 app.use(express.json());
 

@@ -1,11 +1,11 @@
 {
-  "lastId": 31,
+  "lastId": 49,
   "cats": [
     {
       "name": "White Whiskers",
       "age": 4,
       "breed": "Ragdoll",
-      "dateJoined": "2025-03-06T18:42:12.185Z",
+      "dateJoined": "2025-04-24T20:27:25.277Z",
       "vaccinated": true,
       "temperament": [
         "Calm",
@@ -63,6 +63,48 @@
       "id": 4,
       "isAdopted": true,
       "adopterId": 1
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-04-03T22:36:45.068Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 32
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-04-24T12:50:58.586Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 46
+    },
+    {
+      "name": "Mittens",
+      "age": 1,
+      "breed": "Persian",
+      "dateJoined": "2025-04-24T20:27:25.263Z",
+      "vaccinated": true,
+      "temperament": [
+        "Calm",
+        "Affectionate"
+      ],
+      "staffInCharge": "00000000-0000-0000-0000-000000000000",
+      "isAdopted": false,
+      "id": 48
     }
   ]
 }
