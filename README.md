@@ -79,7 +79,7 @@ These settings are set in the middleware/auth.ts file.
 - `DELETE /staff/:id` - Delete a specific staff member by ID
 
 ### Adopters
-- `GET /adpoters` - Retrieve a list of all adopters
+- `GET /adopters` - Retrieve a list of all adopters
 - `POST /adopters` - Add a new adopter
 - `GET /adopters/:id` - Retrieve a specific adopter by ID
 - `DELETE /adopters/:id` - Delete a specific adopter by ID
