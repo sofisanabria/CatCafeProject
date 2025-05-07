@@ -32,9 +32,9 @@ After the server starts, you can access the Swagger interface by opening [http:/
 The staff endpoints have JWT authentication, and uses a JWT secret. A JWT secret is a string used to sign and verify JSON Web Tokens (JWTs).  It's essential for ensuring that your JWTs are secure and can't be tampered with.
 When you create a JWT, you use the secret to generate a signature. When a user sends the JWT back, your server uses the same secret to verify the signature.
 You'll need to create a .env file with this variable set: "JWT_SECRET=". Use a long, random, and unpredictable string for the value.
-
-To use the protected endpoints (the Staff ones) you must create an user with the /register endpoint. That way you'll have credentials for the /login endpoint, which will return a Token that you'll need to authenticate for the Staff endpoints.
-
+Using JWT Authentication also means that you'll be working with a Bearer Token that you need to send in the header whenever you want to call an endpoint.
+The /login endpoint returns an Access Token and a Refresh Token. The Access Token is the one that you need to send in the header of each protected endpoint. The Refresh Token is used to get a new Access Token when it expires, using the /refresh endpoint.
+To generate credentials for the /login endpoint you must create an user with the /register endpoint.
 
 To disable authentication (for development purposes), you can run the project with the DISABLE_AUTH environment variable:
 
