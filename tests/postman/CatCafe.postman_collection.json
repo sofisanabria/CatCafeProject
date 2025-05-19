@@ -65,6 +65,153 @@
 							"response": []
 						},
 						{
+							"name": "Existent cat adopter different id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const adopter = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/adopters\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": pm.collectionVariables.get(\"adopterName\"),\r",
+											"                \"lastName\": pm.collectionVariables.get(\"adopterLastName\").toString(),\r",
+											"                \"dateOfBirth\": \"2000-05-06T17:28:27.459Z\",\r",
+											"                \"phone\": pm.collectionVariables.get(\"adopterPhone\").toString(),\r",
+											"                \"address\": pm.collectionVariables.get(\"adopterAddress\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(adopter.json());\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{adopterName}}\",\r\n  \"lastName\": \"{{adopterLastName}}\",\r\n  \"dateOfBirth\": \"2000-05-06T17:28:27.459Z\",\r\n  \"phone\": \"{{adopterPhone}}\",\r\n  \"address\": \"{{adopterAddress}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/adopters",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Existent cat adopter",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const adopter = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/adopters\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": pm.collectionVariables.get(\"adopterName\"),\r",
+											"                \"lastName\": pm.collectionVariables.get(\"adopterLastName\").toString(),\r",
+											"                \"dateOfBirth\": \"2000-05-06T17:28:27.459Z\",\r",
+											"                \"phone\": pm.collectionVariables.get(\"adopterPhone\").toString(),\r",
+											"                \"address\": pm.collectionVariables.get(\"adopterAddress\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(adopter.json());\r",
+											"    pm.collectionVariables.set(\"adopterID\", adopter.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{adopterName}}\",\r\n  \"lastName\": \"{{adopterLastName}}\",\r\n  \"dateOfBirth\": \"2000-05-06T17:28:27.459Z\",\r\n  \"phone\": \"{{adopterPhone}}\",\r\n  \"address\": \"{{adopterAddress}}\",\r\n  \"id\": {{adopterID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/adopters",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Cat adopter empty phone number",
 							"event": [
 								{
@@ -73,6 +220,9 @@
 										"exec": [
 											"pm.test(\"Status code is 400\", function () {\r",
 											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Phone number must have at least 8 digits\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -588,6 +738,60 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Cat adopter null date of birth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"The adopter must be at least 18 years old to adopt a cat\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{adopterName}}\",\r\n  \"lastName\": \"{{adopterLastName}}\",\r\n  \"dateOfBirth\": \"null\",\r\n  \"phone\": \"{{adopterPhone}}\",\r\n  \"address\": \"{{adopterAddress}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/adopters",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -707,7 +911,7 @@
 							"response": []
 						},
 						{
-							"name": "Non existent adpoter",
+							"name": "Non existent adopter",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -727,11 +931,62 @@
 											"    ids.push(element.id)\r",
 											"    )\r",
 											"\r",
-											"    console.log(ids)\r",
+											"    console.log(Math.max(...ids))\r",
 											"\r",
-											"    const lastID = ids[ids.length -1]\r",
+											"    const lastID = Math.max(...ids)\r",
 											"\r",
 											"    pm.collectionVariables.set(\"adopterID\", lastID + 1);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Adopter not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/adopters/{{adopterID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters",
+										"{{adopterID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Not valid adopter id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    pm.collectionVariables.set(\"adopterID\", \"Cat\");\r",
 											"} catch (err) {\r",
 											"    console.error(err);\r",
 											"}"
@@ -823,6 +1078,104 @@
 										"exec": [
 											"pm.test(\"Status code is 204\", function () {\r",
 											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/adopters/{{adopterID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters",
+										"{{adopterID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete adopter with a cat",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/adopters\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": pm.collectionVariables.get(\"adopterName\"),\r",
+											"                \"lastName\": pm.collectionVariables.get(\"adopterLastName\").toString(),\r",
+											"                \"dateOfBirth\": \"2000-05-06T17:28:27.459Z\",\r",
+											"                \"phone\": pm.collectionVariables.get(\"adopterPhone\").toString(),\r",
+											"                \"address\": pm.collectionVariables.get(\"adopterAddress\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"adopterID\", response.json().id);\r",
+											"\r",
+											"    const cat = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": true,\r",
+											"                \"adopterId\": response.json().id\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"    console.log(cat.json())\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Adopters can not be deleted if the adoption was carried out\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -867,10 +1220,8 @@
 											"    elements.forEach((element) =>\r",
 											"    ids.push(element.id)\r",
 											"    )\r",
-											"\r",
-											"    console.log(ids)\r",
-											"\r",
-											"    const lastID = ids[ids.length -1]\r",
+											"    \r",
+											"    const lastID = Math.max(...ids)\r",
 											"\r",
 											"    pm.collectionVariables.set(\"adopterID\", lastID + 1);\r",
 											"} catch (err) {\r",
@@ -887,6 +1238,9 @@
 										"exec": [
 											"pm.test(\"Status code is 404\", function () {\r",
 											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Adopter not found\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -895,6 +1249,201 @@
 								}
 							],
 							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/adopters/{{adopterID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters",
+										"{{adopterID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete not valid adopter",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    pm.collectionVariables.set(\"adopterID\", \"Cat\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Adopter not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/adopters/{{adopterID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters",
+										"{{adopterID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete empty adopter id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    pm.collectionVariables.set(\"adopterID\", \"\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Authentication required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/adopters/{{adopterID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"adopters",
+										"{{adopterID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete empty adopter id authenticated",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    const login = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(login.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", login.json().accessToken)\r",
+											"    pm.collectionVariables.set(\"adopterID\", \"\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Cannot DELETE /api/adopters/\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1231,7 +1780,26 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											""
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -1286,7 +1854,26 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											""
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -1333,6 +1920,433 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Login non existent user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Invalid credentials\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"Cat\",\r\n  \"password\": \"{{password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login not valid password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Invalid credentials\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"Cat\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh token",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    const login = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(login.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", login.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"accessToken\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"refreshToken\": \"{{token}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/refresh",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh not valid token",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    const login = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(login.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", login.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Invalid refresh token. JsonWebTokenError: jwt malformed\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"refreshToken\": \"Cat\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/refresh",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh empty token",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    const login = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(login.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", login.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Refresh token is required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"refreshToken\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/auth/refresh",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -1354,6 +2368,158 @@
 											"pm.test(\"Status code is 201\", function () {\r",
 											"    pm.response.to.have.status(201);\r",
 											"});\r",
+											"\r",
+											"const schema = {\r",
+											"    \"name\": \"Clover\",\r",
+											"    \"age\": 1,\r",
+											"    \"breed\": \"Persian\",\r",
+											"    \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r",
+											"    \"vaccinated\": true,\r",
+											"    \"temperament\": [\r",
+											"        \"Curious\"\r",
+											"    ],\r",
+											"    \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"    \"isAdopted\": false\r",
+											"}\r",
+											"pm.test('Correct cat data', function() {\r",
+											"  pm.response.to.have.jsonSchema(schema);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"packages": {},
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add adopted new cat",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const adopter = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/adopters\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": pm.collectionVariables.get(\"adopterName\"),\r",
+											"                \"lastName\": pm.collectionVariables.get(\"adopterLastName\").toString(),\r",
+											"                \"dateOfBirth\": \"2000-05-06T17:28:27.459Z\",\r",
+											"                \"phone\": pm.collectionVariables.get(\"adopterPhone\").toString(),\r",
+											"                \"address\": pm.collectionVariables.get(\"adopterAddress\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(adopter.json());\r",
+											"\r",
+											"\r",
+											"    pm.collectionVariables.set(\"adopterID\", adopter.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": true,\r\n  \"adopterId\": {{adopterID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add adopted new cat without AdopterId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"AdopterId must be specified when the cat is adopted\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
 											""
 										],
 										"type": "text/javascript",
@@ -1366,7 +2532,677 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat not vaccinated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": false,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without vaccinated",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat empty breed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": false,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without breed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": false,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat empty staff in charge",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without staff in charge",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat with negative age",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Number must be greater than 0\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": -1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without age",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat empty name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat with null date joined",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected date, received null\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": null,\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat empty date joined",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without date joined",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without temperament",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new cat without is adopted",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Clover\",\r\n  \"age\": 1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-08T18:19:37.105Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Curious\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1481,8 +3317,141 @@
 											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
 											"});\r",
+											"\r",
+											"const schema = {\r",
+											"    \"name\": \"Oliver\",\r",
+											"    \"age\": 2,\r",
+											"    \"breed\": \"Persian\",\r",
+											"    \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"    \"vaccinated\": true,\r",
+											"    \"temperament\": [\r",
+											"        \"Calm\"\r",
+											"    ],\r",
+											"    \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"    \"isAdopted\": false,\r",
+											"    \"id\": pm.collectionVariables.get(\"catID\")\r",
+											"}\r",
+											"\r",
+											"pm.test('Correct cat data', function() {\r",
+											"  pm.response.to.have.jsonSchema(schema);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a cat non existent id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"GET\",\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    const elements = response.json()\r",
+											"    let ids = []\r",
+											"    elements.forEach((element) =>\r",
+											"    ids.push(element.id)\r",
+											"    )\r",
+											"\r",
+											"    console.log(ids)\r",
+											"\r",
+											"    const lastID = Math.max(...ids)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", lastID + 1);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
 											"pm.test(\"Body matches string\", function () {\r",
-											"    pm.expect(pm.response.text()).to.include(\"Oliver\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"Cat not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a cat not valid id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    pm.collectionVariables.set(\"catID\", \"Cat\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Cat not found\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -1561,6 +3530,25 @@
 										"exec": [
 											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const schema = {\r",
+											"  \"name\": \"Oli\",\r",
+											"  \"age\": 3,\r",
+											"  \"breed\": \"Persian\",\r",
+											"  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r",
+											"  \"vaccinated\": true,\r",
+											"  \"temperament\": [\r",
+											"    \"Playful\", \r",
+											"    \"Nervous\"\r",
+											"  ],\r",
+											"  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"  \"isAdopted\": false,\r",
+											"  \"id\": pm.collectionVariables.get(\"catID\")\r",
+											"}\r",
+											"\r",
+											"pm.test('Correct cat data', function() {\r",
+											"  pm.response.to.have.jsonSchema(schema);\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -1574,6 +3562,1143 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update adopted cat data",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"\r",
+											"    const adopter = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/adopters\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": pm.collectionVariables.get(\"adopterName\"),\r",
+											"                \"lastName\": pm.collectionVariables.get(\"adopterLastName\").toString(),\r",
+											"                \"dateOfBirth\": \"2000-05-06T17:28:27.459Z\",\r",
+											"                \"phone\": pm.collectionVariables.get(\"adopterPhone\").toString(),\r",
+											"                \"address\": pm.collectionVariables.get(\"adopterAddress\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(adopter.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"adopterID\", adopter.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const schema = {\r",
+											"  \"name\": \"Oli\",\r",
+											"  \"age\": 3,\r",
+											"  \"breed\": \"Persian\",\r",
+											"  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r",
+											"  \"vaccinated\": true,\r",
+											"  \"temperament\": [\r",
+											"    \"Playful\", \r",
+											"    \"Nervous\"\r",
+											"  ],\r",
+											"  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"  \"isAdopted\": false,\r",
+											"  \"id\": pm.collectionVariables.get(\"catID\")\r",
+											"}\r",
+											"\r",
+											"pm.test('Correct cat data', function() {\r",
+											"  pm.response.to.have.jsonSchema(schema);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": true,\r\n  \"adopterId\": {{adopterID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data not valid temperament",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_enum_value\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Crazy\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data empty string temperament",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_enum_value\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\"\"],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data empty temperament",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_enum_value\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Orange\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data empty staff in charge",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_string\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data not valid staff in charge",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_string\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"Cat\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data empty breed",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"String must contain at least 1 character(s)\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data not valid breed",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected string, received number\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": 12345,\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data negative age",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Number must be greater than 0\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": -1,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data empty age",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected number, received string\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": \"\",\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data empty name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"String must contain at least 1 character(s)\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"2025-05-09T19:28:01.712Z\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data empty date joined",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat data null date joined",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Oli\",\r\n  \"age\": 3,\r\n  \"breed\": \"Persian\",\r\n  \"dateJoined\": \"\",\r\n  \"vaccinated\": true,\r\n  \"temperament\": [\r\n    \"Playful\", \r\n    \"Nervous\"\r\n  ],\r\n  \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"isAdopted\": false\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1673,7 +4798,25 @@
 											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
 											"});\r",
-											""
+											"\r",
+											"const schema = {\r",
+											"    \"name\": \"Oliver\",\r",
+											"    \"age\": 2,\r",
+											"    \"breed\": \"Persian\",\r",
+											"    \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"    \"vaccinated\": true,\r",
+											"    \"temperament\": [\r",
+											"        \"Calm\"\r",
+											"    ],\r",
+											"    \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"    \"isAdopted\": true,\r",
+											"    \"id\": pm.collectionVariables.get(\"catID\"),\r",
+											"    \"adopterId\": pm.collectionVariables.get(\"adopterID\")\r",
+											"};\r",
+											"\r",
+											"pm.test('Correct cat data', function() {\r",
+											"  pm.response.to.have.jsonSchema(schema);\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -1685,7 +4828,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"staffInCharge\": \"b339f710-6762-4c41-a0c2-2869eb8e1b11\",\r\n  \"adopterId\": {{adopterID}}\r\n}",
+									"raw": "{\r\n  \"adopterId\": {{adopterID}}\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1705,6 +4848,645 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Update cat adopter non existent adopter id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    //cat\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"\r",
+											"    //adopter\r",
+											"    const adopter = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/adopters\").toString(),\r",
+											"        method: \"GET\",\r",
+											"    });\r",
+											"\r",
+											"    console.log(adopter.json());\r",
+											"\r",
+											"    const elements = adopter.json()\r",
+											"    let ids = []\r",
+											"    elements.forEach((element) =>\r",
+											"    ids.push(element.id)\r",
+											"    )\r",
+											"\r",
+											"    console.log(ids)\r",
+											"\r",
+											"    const lastID = Math.max(...ids)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"adopterID\", lastID + 1);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Adopter not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"adopterId\": {{adopterID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat adopter empty adopter id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    //cat\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected number, received string\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"adopterId\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat adopter not valid adopter id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    //cat\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected number, received string\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"adopterId\": \"Cat\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat staff in charge",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    //cat\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"\r",
+											"    //staff\r",
+											"    const login = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(login.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", login.json().accessToken)\r",
+											"\r",
+											"    const addStaff = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/staff\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\",\r",
+											"        \"Authorization\": \"Bearer \" + login.json().accessToken\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": pm.collectionVariables.get(\"staffName\").toString(),\r",
+											"                \"lastName\": pm.collectionVariables.get(\"staffLastName\").toString(),\r",
+											"                \"age\": 30,\r",
+											"                \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r",
+											"                \"role\": \"Cat petting manager\"\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(addStaff.json());\r",
+											"    console.log(addStaff.json().id);\r",
+											"\r",
+											"    pm.collectionVariables.set(\"staffID\", addStaff.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const schema = {\r",
+											"    \"name\": \"Oliver\",\r",
+											"    \"age\": 2,\r",
+											"    \"breed\": \"Persian\",\r",
+											"    \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"    \"vaccinated\": true,\r",
+											"    \"temperament\": [\r",
+											"        \"Calm\"\r",
+											"    ],\r",
+											"    \"staffInCharge\": pm.collectionVariables.get(\"staffID\"),\r",
+											"    \"isAdopted\": false,\r",
+											"    \"id\": pm.collectionVariables.get(\"catID\"),\r",
+											"};\r",
+											"\r",
+											"pm.test('Correct cat data', function() {\r",
+											"  pm.response.to.have.jsonSchema(schema);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"staffInCharge\": \"{{staffID}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat empty staff in charge",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    //cat\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_string\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"staffInCharge\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update cat not valid staff in charge",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    //cat\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": \"Oliver\",\r",
+											"                \"age\": 2,\r",
+											"                \"breed\": \"Persian\",\r",
+											"                \"dateJoined\": \"2025-05-08T18:50:58.879Z\",\r",
+											"                \"vaccinated\": true,\r",
+											"                \"temperament\": [\r",
+											"                    \"Calm\"\r",
+											"                ],\r",
+											"                \"staffInCharge\": \"00000000-0000-0000-0000-000000000000\",\r",
+											"                \"isAdopted\": false\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", response.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_string\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"staffInCharge\": \"Cat\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									"try {\r",
+									"    const response = await pm.sendRequest({\r",
+									"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+									"        method: \"POST\",\r",
+									"        header: {\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw', \r",
+									"            raw: JSON.stringify({\r",
+									"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+									"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+									"            })\r",
+									"        }\r",
+									"    });\r",
+									"\r",
+									"    console.log(response.json());\r",
+									"    console.log(pm.collectionVariables.get(\"username\"))\r",
+									"} catch (err) {\r",
+									"    console.error(err);\r",
+									"}"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
 						}
 					]
 				},
@@ -1787,6 +5569,284 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Delete cat non existent id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/cats\").toString(),\r",
+											"        method: \"GET\",\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"    console.log(response.json().id)\r",
+											"    const elements = response.json()\r",
+											"    let ids = []\r",
+											"    elements.forEach((element) =>\r",
+											"    ids.push(element.id)\r",
+											"    )\r",
+											"\r",
+											"    console.log(ids)\r",
+											"\r",
+											"    const lastID = Math.max(...ids)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"catID\", lastID + 1);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Cat not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete cat not valid id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    pm.collectionVariables.set(\"catID\", \"Cat\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Cat not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete cat empty id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    pm.collectionVariables.set(\"catID\", \"\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Authentication required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete cat empty id authorized",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/register\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    const login = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(login.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", login.json().accessToken)\r",
+											"    pm.collectionVariables.set(\"catID\", \"\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Cannot DELETE /api/cats/\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/api/cats/{{catID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"cats",
+										"{{catID}}"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -1838,7 +5898,8 @@
 										"exec": [
 											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
-											"});"
+											"});\r",
+											""
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -1873,6 +5934,312 @@
 									"path": [
 										"api",
 										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Staff member by id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"\r",
+											"    const addStaff = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/staff\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\",\r",
+											"        \"Authorization\": \"Bearer \" + response.json().accessToken\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"name\": pm.collectionVariables.get(\"staffName\").toString(),\r",
+											"                \"lastName\": pm.collectionVariables.get(\"staffLastName\").toString(),\r",
+											"                \"age\": 30,\r",
+											"                \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r",
+											"                \"role\": \"Assistant\"\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(addStaff.json());\r",
+											"    pm.collectionVariables.set(\"staffID\", addStaff.json().id);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const schema = {\r",
+											"    \"name\": pm.collectionVariables.get(\"staffName\"),\r",
+											"    \"lastName\": pm.collectionVariables.get(\"staffLastName\"),\r",
+											"    \"age\": 30,\r",
+											"    \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r",
+											"    \"role\": \"Assistant\",\r",
+											"    \"id\": pm.collectionVariables.get(\"staffID\")\r",
+											"};\r",
+											"\r",
+											"pm.test('Correct staff member data', function() {\r",
+											"  pm.response.to.have.jsonSchema(schema);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff/{{staffID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff",
+										"{{staffID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Staff member non existent id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"\r",
+											"    const staff = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/staff\").toString(),\r",
+											"        method: \"GET\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\",\r",
+											"        \"Authorization\": \"Bearer \" + response.json().accessToken\r",
+											"        },\r",
+											"    });\r",
+											"\r",
+											"    const elements = staff.json()\r",
+											"    let ids = []\r",
+											"    elements.forEach((element) =>\r",
+											"    ids.push(element.id)\r",
+											"    )\r",
+											"\r",
+											"    console.log(ids)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"staffID\", 123);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Staff member not found\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Staff member not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff/{{staffID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff",
+										"{{staffID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Staff member not valid id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"\r",
+											"\r",
+											"    pm.collectionVariables.set(\"staffID\", \"Cat\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Staff member not found\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Staff member not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff/{{staffID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff",
+										"{{staffID}}"
 									]
 								}
 							},
@@ -1964,6 +6331,1026 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Add staff member empty name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"String must contain at least 1 character(s)\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 30,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member without name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 30,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member empty last name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"String must contain at least 1 character(s)\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"\",\r\n  \"age\": 30,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member without last name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"age\": 30,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member negative age",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Number must be greater than or equal to 18\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": -1,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member string age",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected number, received string\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": \"30\",\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member without age",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member empty date joined",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected date, received null\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 18,\r\n  \"dateJoined\": \"\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member null date joined",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Expected date, received null\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 18,\r\n  \"dateJoined\": null,\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member without date joined",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 18,\r\n  \"role\": \"Assistant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member empty role",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"String must contain at least 1 character(s)\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 34,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add staff member without role",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body matches string\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Required\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 34,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -2032,6 +7419,9 @@
 										"exec": [
 											"pm.test(\"Status code is 204\", function () {\r",
 											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    pm.response.to.have.body(\"\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -2054,7 +7444,288 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"name\": \"{{staffName}}\",\r\n  \"lastName\": \"{{staffLastName}}\",\r\n  \"age\": 30,\r\n  \"dateJoined\": \"2025-05-09T18:24:45.220Z\",\r\n  \"role\": \"Assistant\"\r\n}",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff/{{staffID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff",
+										"{{staffID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove staff member non existent id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"\r",
+											"    const staff = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/staff\").toString(),\r",
+											"        method: \"GET\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\",\r",
+											"        \"Authorization\": \"Bearer \" + response.json().accessToken\r",
+											"        },\r",
+											"    });\r",
+											"\r",
+											"    const elements = staff.json()\r",
+											"    let ids = []\r",
+											"    elements.forEach((element) =>\r",
+											"    ids.push(element.id)\r",
+											"    )\r",
+											"\r",
+											"    console.log(ids)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"staffID\", 123);\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Staff not found\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Staff not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff/{{staffID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff",
+										"{{staffID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove staff member not valid id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"staffID\", \"Cat\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Staff not found\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Staff not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/staff/{{staffID}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"staff",
+										"{{staffID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove staff member empty id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {\r",
+											"    const response = await pm.sendRequest({\r",
+											"        url: (pm.collectionVariables.get(\"base_url\") + \"/api/auth/login\").toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"        \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw', \r",
+											"            raw: JSON.stringify({\r",
+											"                \"username\": pm.collectionVariables.get(\"username\").toString(),\r",
+											"                \"password\": pm.collectionVariables.get(\"password\").toString()\r",
+											"            })\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    console.log(response.json());\r",
+											"\r",
+											"    pm.collectionVariables.set(\"token\", response.json().accessToken)\r",
+											"\r",
+											"    pm.collectionVariables.set(\"staffID\", \"\");\r",
+											"} catch (err) {\r",
+											"    console.error(err);\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"pm.test(\"Staff not found\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Cannot DELETE /api/staff/\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
