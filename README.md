@@ -61,6 +61,17 @@ DISABLE_AUTH=true npm run dev
 The Login endpoint is set to accept up to 5 attempts. If you could not log in correctly after 5 attempts, you will be asked to wait 5 minutes.
 These settings are set in the routes/authRoutes.ts file, under the loginLimiter constant.
 
+To disable the rate limit, you can run the project with the DISABLE_RATE_LIMIT environment variable:
+Windows (PowerShell):
+```sh
+$env:DISABLE_RATE_LIMIT="true"; npm run dev
+```
+Linux/Mac:
+```sh
+DISABLE_RATE_LIMIT=true npm run dev
+```
+And use the header "x-skip-rate-limit" with the value "true" in your request.
+
 The Access Token expiration is set to 15 minutes, and the expiration of the Refresh Token is set to 7 days.
 These settings are set in the middleware/auth.ts file.
 

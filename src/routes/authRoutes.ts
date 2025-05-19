@@ -1,6 +1,7 @@
-import { Router } from 'express';
-import { authController } from '../controllers/authController.ts';
-import rateLimit from 'express-rate-limit';
+import { Router, Request, Response } from "express";
+import { authController } from "../controllers/authController.ts";
+import rateLimit from "express-rate-limit";
+import { NextFunction } from "express-serve-static-core";
 
 const router = Router();
 
@@ -8,8 +9,21 @@ const router = Router();
 const loginLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
   max: 5,
-  message: { error: 'Too many login attempts, please try again later' }
+  message: { error: "Too many login attempts, please try again later" },
 });
+
+// If DISABLE_RATE_LIMIT is set to true, check for a header to skip rate limiting
+// Otherwise, apply the rate limiting middleware
+// This is useful for testing or in environments where rate limiting is not desired
+const checkRateLimit = (req: Request, res: Response, next: NextFunction) => {
+  if (process.env.DISABLE_RATE_LIMIT === "true") {
+    const skipRateLimit = req.headers["x-skip-rate-limit"];
+    if (skipRateLimit) {
+      return next();
+    }
+  }
+  return loginLimiter(req, res, next);
+};
 
 /**
  * @openapi
@@ -66,7 +80,7 @@ const loginLimiter = rateLimit({
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/auth/register', (req, res) => authController.register(req, res));
+router.post("/auth/register", (req, res) => authController.register(req, res));
 
 /**
  * @openapi
@@ -128,7 +142,9 @@ router.post('/auth/register', (req, res) => authController.register(req, res));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/auth/login', loginLimiter, (req, res) => authController.login(req, res));
+router.post("/auth/login", checkRateLimit, (req, res) =>
+  authController.login(req, res)
+);
 
 /**
  * @openapi
@@ -175,6 +191,6 @@ router.post('/auth/login', loginLimiter, (req, res) => authController.login(req,
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/auth/refresh', (req, res) => authController.refresh(req, res));
+router.post("/auth/refresh", (req, res) => authController.refresh(req, res));
 
 export default router;
