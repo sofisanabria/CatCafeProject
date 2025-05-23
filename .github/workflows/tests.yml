@@ -40,6 +40,7 @@ jobs:
           # run collection + 4 reporters
           npx newman run ./tests/postman/CatCafe.postman_collection.json \
             -r cli,json,junit,html \
+            --env-var "base_url=http://127.0.0.1:3000" \
             --reporter-json-export newman/results.json \
             --reporter-junit-export newman/results.xml \
             --reporter-html-export newman/report.html
