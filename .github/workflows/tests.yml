@@ -1,0 +1,40 @@
+name: CI-Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  DISABLE_RATE_LIMIT: ${{ true }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: Testing
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set node version
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      # Install and start the CatCafe API
+      - name: Install and start API
+        working-directory: ./
+        run: |
+          npm install
+          npm run dev &  # Start the server in the background
+          sleep 5        # Give the server time to start
+      # Run tests
+      - name: Run postman tests
+        uses: matt-ball/newman-action@master
+        with:
+          collection: ./tests/postman/CatCafe.postman_collection.json
+      
