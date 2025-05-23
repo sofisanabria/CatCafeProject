@@ -30,20 +30,20 @@ jobs:
  
       - name: Install dependencies & start API
         run: |
-          npm i
-          npm install --save-dev newman newman-reporter-html
+          npm ci
           npm run dev &      # background the CatCafe API
           sleep 5            # give it time to start
+ 
+      - name: Install Newman CLI
+        run: npm install --save-dev newman
  
       - name: Run Postman collection with Newman
         run: |
           # run collection + 4 reporters
           npx newman run ./tests/postman/CatCafe.postman_collection.json \
-            -r cli,json,junit,html \
-            --env-var "base_url=http://127.0.0.1:3000" \
+            -r cli,json,junit \
             --reporter-json-export newman/results.json \
-            --reporter-junit-export newman/results.xml \
-            --reporter-html-export newman/report.html
+            --reporter-junit-export newman/results.xml
  
       - name: Upload Newman reports
         if: always()
@@ -56,4 +56,3 @@ jobs:
           path: |
             newman/results.json
             newman/results.xml
-            newman/report.html
