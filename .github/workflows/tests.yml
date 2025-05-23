@@ -30,12 +30,10 @@ jobs:
  
       - name: Install dependencies & start API
         run: |
-          npm ci
+          npm i
+          npm install --save-dev newman newman-reporter-html
           npm run dev &      # background the CatCafe API
           sleep 5            # give it time to start
- 
-      - name: Install Newman CLI
-        run: npm install --save-dev newman newman-reporter-html
  
       - name: Run Postman collection with Newman
         run: |
